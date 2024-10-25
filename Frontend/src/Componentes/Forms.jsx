@@ -69,8 +69,11 @@ export default function Forms() {
             name="Selecione o seu hotel"
             title="Selecione o seu hotel"
             className="font-bold text-lg py-11 w-3/6 px-3 rounded-lg"
+            required 
+            value={hotel} 
+            onChange={e => setHotel(e.target.value)}
           >
-            <option required value={hotel} onChange={e => setHotel(e.target.value)} hidden>
+            <option hidden>
               Selecione o seu hotel
             </option>
             <optgroup label="Rede de Hotéis 1">
