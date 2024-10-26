@@ -1,6 +1,8 @@
+import { Link, useParams } from 'react-router-dom';
 import handleSubmit from '../App'
 import api from '../services/api'
 import { useState, useEffect } from 'react';
+
 
 export default function Forms() {
 
@@ -63,7 +65,7 @@ export default function Forms() {
       </section>
 
       <section className="w-full">
-        <form onSubmit={handleSubmit} action="" className="flex flex-wrap flex-col gap-y-5 items-center">
+        <form onSubmit={handleSubmit} action="" className="flex flex-wrap flex-col gap-y-5 items-center" >
           <select
             id="hoteis"
             name="Selecione o seu hotel"
@@ -72,6 +74,7 @@ export default function Forms() {
             required 
             value={hotel} 
             onChange={e => setHotel(e.target.value)}
+            
           >
             <option hidden>
               Selecione o seu hotel
@@ -259,23 +262,24 @@ export default function Forms() {
             Reconhecimento Facial
           </h1>
           <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
-            <label className="px-5 font-bold" htmlFor="fotoRgVerso">
+            <label className="px-5 font-bold" htmlFor="fotoRosto">
               Adicione uma imagem do seu rosto:
             </label>
             <input
               className="px-5 focus:outline-none"
               type="file"
-              id="fotoRgVerso"
+              id="fotoRosto"
               multiple accept="image/png, image/jpg"
               required
             />
           </div>
-          <input
+          <Link
+            to={`/FaceID/${nome}`}
             type="submit"
             value="Enviar"
             id="button_submit"
-            className="block bg-verde w-3/6 p-3 rounded-lg hover:bg-white hover:border-verde hover:border-2 font-bold"
-          />
+            className="block bg-verde w-3/6 p-3 rounded-lg hover:bg-white hover:border-verde hover:border-2 font-bold text-center"
+          >Enviar</Link>
         </form>
       </section>
     </main>
