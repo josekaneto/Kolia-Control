@@ -1,59 +1,103 @@
-import { Link, useParams } from 'react-router-dom';
-import handleSubmit from '../App'
-import api from '../services/api'
-import { useState, useEffect } from 'react';
-
+import { useParams } from 'react-router-dom';
+import api from '../services/api';
+import { useState } from 'react';
 
 export default function Forms() {
-
-  const [ nome, setNome ] = useState('');
-  const [ email, setEmail ] = useState('');
-  const [ telefone, setTelefone ] = useState('');
-  const [ estado, setEstado ] = useState('');
-  const [ cidade, setCidade] = useState('');
-  const [ endereco, setEndereco ] = useState('');
-  const [ cep, setCep ] = useState('');
-  const [ cpf, setCpf ] = useState('');
-  const [ rgNumero, setRgNumero] = useState('');
-  const [ numeroReserva, setNumeroReserva] = useState('');
-  const [ hotel, setHotel] = useState('');
-  const [ allHospedes, setAllHospedes] = useState('')
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [estado, setEstado] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [endereco, setEndereco] = useState('');
+  const [cep, setCep] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [rgNumero, setRgNumero] = useState('');
+  const [numeroReserva, setNumeroReserva] = useState('');
+  const [hotel, setHotel] = useState('');
+  const [allHospedes, setAllHospedes] = useState([]);
+  const [fotoRosto, setFotoRosto] = useState(null);
+  const [error, setError] = useState(''); // Para armazenar mensagens de erro
 
   async function handleSubmit(e) {
-    e.preventDefault(); 
+    e.preventDefault();
+
+    // Log dos valores dos campos para depuração
+    console.log('Nome:', nome);
+    console.log('Email:', email);
+    console.log('Telefone:', telefone);
+    console.log('Estado:', estado);
+    console.log('Cidade:', cidade);
+    console.log('Endereço:', endereco);
+    console.log('CEP:', cep);
+    console.log('CPF:', cpf);
+    console.log('RG:', rgNumero);
+    console.log('Número da Reserva:', numeroReserva);
+    console.log('Hotel:', hotel);
+    console.log('Foto:', fotoRosto);
+
+    // Validação dos campos obrigatórios
+    const requiredFields = [nome, email, telefone, hotel, fotoRosto];
+    const fieldNames = ['Nome', 'E-mail', 'Telefone', 'Hotel', 'Foto do Rosto'];
+
+    for (let i = 0; i < requiredFields.length; i++) {
+      if (!requiredFields[i]) {
+        setError(`Por favor, preencha o campo: ${fieldNames[i]}`);
+        return;
+      }
+    }
+
+    const formData = new FormData();
+    formData.append('nome', nome);
+    formData.append('email', email);
+    formData.append('telefone', telefone);
+    formData.append('estado', estado);
+    formData.append('cidade', cidade);
+    formData.append('endereco', endereco);
+    formData.append('cep', cep);
+    formData.append('cpf', cpf);
+    formData.append('rgNumero', rgNumero);
+    formData.append('numeroReserva', numeroReserva);
+    formData.append('hotel', hotel);
+    formData.append('fotoRosto', fotoRosto);
+
+    // Log para depuração
+    console.log('FormData:', Array.from(formData.entries()));
 
     try {
-      const res = await api.post('/hospedes', {
-        nome,
-        email,
-        telefone,
-        estado,
-        cidade,
-        endereco,
-        cep,
-        cpf,
-        rgNumero,
-        numeroReserva,
-        hotel,
+      const res = await api.post('/hospedes', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
-      setAllHospedes([...allHospedes, res.data]);
-
-      setNome('');
-      setEmail('');
-      setTelefone('');
-      setEstado('');
-      setCidade('');
-      setEndereco('');
-      setCep('');
-      setCpf('');
-      setRgNumero('');
-      setNumeroReserva('');
-      setHotel('');
+      setAllHospedes(prev => [...prev, res.data]);
+      resetForm();
     } catch (error) {
-      console.error('Error saving data:', error);
+      if (error.response) {
+        console.error('Error saving data:', error.response.data);
+        setError(error.response.data.message || 'Erro ao salvar os dados. Tente novamente.');
+      } else {
+        console.error('Error saving data:', error);
+        setError('Erro ao salvar os dados. Tente novamente.');
+      }
     }
   }
+
+  const resetForm = () => {
+    setNome('');
+    setEmail('');
+    setTelefone('');
+    setEstado('');
+    setCidade('');
+    setEndereco('');
+    setCep('');
+    setCpf('');
+    setRgNumero('');
+    setNumeroReserva('');
+    setHotel('');
+    setFotoRosto(null);
+    setError('');
+  };
 
   return (
     <main className="w-full flex h-full font-main items-center flex-col p-[50px] gap-y-[50px]">
@@ -64,36 +108,40 @@ export default function Forms() {
         <p className="font-medium text-2xl">Preencha o Formulário</p>
       </section>
 
+      {error && <p className="text-red-500">{error}</p>} {/* Mensagem de erro */}
+
       <section className="w-full">
-        <form onSubmit={handleSubmit} action="" className="flex flex-wrap flex-col gap-y-5 items-center" >
-          <select
-            id="hoteis"
-            name="Selecione o seu hotel"
-            title="Selecione o seu hotel"
-            className="font-bold text-lg py-11 w-3/6 px-3 rounded-lg"
-            required 
-            value={hotel} 
-            onChange={e => setHotel(e.target.value)}
-            
-          >
-            <option hidden>
-              Selecione o seu hotel
-            </option>
-            <optgroup label="Rede de Hotéis 1">
-              <option value="1">Hotel 1.1</option>
-              <option value="1">Hotel 1.2</option>
-            </optgroup>
-            <optgroup label="Rede de Hotéis 2">
-              <option value="2">Hotel 2.1</option>
-              <option value="2">Hotel 2.2</option>
-            </optgroup>
-            <optgroup label="Rede de Hotéis 3">
-              <option value="3">Hotel 3.1</option>
-              <option value="3">Hotel 3.2</option>
-            </optgroup>
-          </select>
-          <div className="flex flex-col bg-white py-5 gap-y-5 w rounded-lg w-3/6">
-            <label htmlFor="reserva" className="font-bold text-lg px-5">
+        <form onSubmit={handleSubmit} className="flex flex-wrap flex-col gap-y-5 items-center">
+          <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
+            <label className="px-5 font-bold" htmlFor="hoteis">
+              Selecione o seu hotel:
+            </label>
+            <select
+              id="hoteis"
+              name="hoteis"
+              className="font-bold text-lg py-3 w-full px-3 rounded-lg"
+              required
+              value={hotel}
+              onChange={e => setHotel(e.target.value)}
+            >
+              <option hidden>Selecione o seu hotel</option>
+              <optgroup label="Rede de Hotéis 1">
+                <option value="1">Hotel 1.1</option>
+                <option value="1">Hotel 1.2</option>
+              </optgroup>
+              <optgroup label="Rede de Hotéis 2">
+                <option value="2">Hotel 2.1</option>
+                <option value="2">Hotel 2.2</option>
+              </optgroup>
+              <optgroup label="Rede de Hotéis 3">
+                <option value="3">Hotel 3.1</option>
+                <option value="3">Hotel 3.2</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
+            <label className="px-5 font-bold text-lg" htmlFor="reserva">
               Número da reserva:
             </label>
             <input
@@ -101,12 +149,12 @@ export default function Forms() {
               type="text"
               id="reserva"
               placeholder="Digite o número da sua reserva"
-              required 
-              value={numeroReserva} 
+              required
+              value={numeroReserva}
               onChange={e => setNumeroReserva(e.target.value)}
-
             />
           </div>
+
           <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
             <label className="px-5 font-bold text-lg" htmlFor="nome">
               Nome:
@@ -121,6 +169,7 @@ export default function Forms() {
               onChange={e => setNome(e.target.value)}
             />
           </div>
+
           <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
             <label className="px-5 font-bold text-lg" htmlFor="email">
               E-mail:
@@ -135,6 +184,7 @@ export default function Forms() {
               onChange={e => setEmail(e.target.value)}
             />
           </div>
+
           <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
             <label className="px-5 font-bold text-lg" htmlFor="telefone">
               Telefone:
@@ -152,7 +202,7 @@ export default function Forms() {
 
           <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
             <label className="px-5 font-bold text-lg" htmlFor="estado">
-              Estado(UF):
+              Estado (UF):
             </label>
             <input
               className="px-5 focus:outline-none"
@@ -164,6 +214,7 @@ export default function Forms() {
               onChange={e => setEstado(e.target.value)}
             />
           </div>
+
           <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
             <label className="px-5 font-bold text-lg" htmlFor="cidade">
               Cidade:
@@ -178,6 +229,7 @@ export default function Forms() {
               onChange={e => setCidade(e.target.value)}
             />
           </div>
+
           <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
             <label className="px-5 font-bold text-lg" htmlFor="endereco">
               Endereço:
@@ -186,12 +238,13 @@ export default function Forms() {
               className="px-5 focus:outline-none"
               type="text"
               id="endereco"
-              placeholder="Digite o seu Endereço:"
+              placeholder="Digite seu Endereço:"
               required
               value={endereco}
               onChange={e => setEndereco(e.target.value)}
             />
           </div>
+
           <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
             <label className="px-5 font-bold text-lg" htmlFor="cep">
               CEP:
@@ -200,86 +253,62 @@ export default function Forms() {
               className="px-5 focus:outline-none"
               type="text"
               id="cep"
-              placeholder="Digite o seu CEP:"
+              placeholder="Digite seu CEP"
               required
               value={cep}
               onChange={e => setCep(e.target.value)}
             />
           </div>
+
           <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
-            <label className="px-5 font-bold" htmlFor="cpf">
+            <label className="px-5 font-bold text-lg" htmlFor="cpf">
               CPF:
             </label>
             <input
               className="px-5 focus:outline-none"
               type="text"
               id="cpf"
-              placeholder="Digite o seu CPF"
+              placeholder="Digite seu CPF"
               required
               value={cpf}
               onChange={e => setCpf(e.target.value)}
             />
           </div>
+
           <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
-            <label className="px-5 font-bold" htmlFor="rg">
+            <label className="px-5 font-bold text-lg" htmlFor="rgNumero">
               RG:
             </label>
             <input
               className="px-5 focus:outline-none"
               type="text"
-              id="rg"
-              placeholder="Digite o seu RG"
+              id="rgNumero"
+              placeholder="Digite seu RG"
               required
               value={rgNumero}
               onChange={e => setRgNumero(e.target.value)}
             />
           </div>
+
           <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
-            <label className="px-5 font-bold" htmlFor="fotoRgFrente">
-              Adicione a imagem da frente do seu RG:
-            </label>
-            <input
-              className="px-5 focus:outline-none"
-              type="file"
-              id="fotoRgFrente"
-              accept="image/*"
-              required
-            />
-          </div>
-          <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
-            <label className="px-5 font-bold" htmlFor="fotoRgVerso">
-              Adicione a imagem do verso do seu RG:
-            </label>
-            <input
-              className="px-5 focus:outline-none"
-              type="file"
-              id="fotoRgVerso"
-              multiple accept="image/png, image/jpg"
-              required
-            />
-          </div>
-          <h1 className=" text-2xl font-extrabold text-verde">
-            Reconhecimento Facial
-          </h1>
-          <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
-            <label className="px-5 font-bold" htmlFor="fotoRosto">
-              Adicione uma imagem do seu rosto:
+            <label className="px-5 font-bold text-lg" htmlFor="fotoRosto">
+              Foto do Rosto:
             </label>
             <input
               className="px-5 focus:outline-none"
               type="file"
               id="fotoRosto"
-              multiple accept="image/png, image/jpg"
               required
+              accept="image/*"
+              onChange={e => setFotoRosto(e.target.files[0])}
             />
           </div>
-          <Link
-            to={`/FaceID/${nome}`}
-            type="submit"
-            value="Enviar"
-            id="button_submit"
-            className="block bg-verde w-3/6 p-3 rounded-lg hover:bg-white hover:border-verde hover:border-2 font-bold text-center"
-          >Enviar</Link>
+
+          <div className="flex justify-center bg-white rounded-lg w-3/6">
+            <button className="bg-verde text-white rounded-lg px-5 py-3 font-bold hover:bg-green-600">
+              Enviar
+            </button>
+          </div>
         </form>
       </section>
     </main>
