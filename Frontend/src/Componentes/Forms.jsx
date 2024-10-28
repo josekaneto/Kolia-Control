@@ -1,23 +1,31 @@
-import { Link, useParams } from 'react-router-dom';
-import handleSubmit from '../App'
+import { Link } from 'react-router-dom';
 import api from '../services/api'
-import { useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
+import { ContextFaceID } from '../context/ContextFaceID';
+
 
 
 export default function Forms() {
 
-  const [ nome, setNome ] = useState('');
-  const [ email, setEmail ] = useState('');
-  const [ telefone, setTelefone ] = useState('');
-  const [ estado, setEstado ] = useState('');
-  const [ cidade, setCidade] = useState('');
-  const [ endereco, setEndereco ] = useState('');
-  const [ cep, setCep ] = useState('');
-  const [ cpf, setCpf ] = useState('');
-  const [ rgNumero, setRgNumero] = useState('');
-  const [ numeroReserva, setNumeroReserva] = useState('');
-  const [ hotel, setHotel] = useState('');
-  const [ allHospedes, setAllHospedes] = useState('')
+  const { nome, setNome,
+    email, setEmail,
+    telefone, setTelefone,
+    estado, setEstado,
+    cidade, setCidade,
+    endereco, setEndereco,
+    cep, setCep,
+    cpf, setCpf,
+    rgNumero, setRgNumero,
+    numeroReserva, setNumeroReserva,
+    hotel, setHotel,
+    allHospedes, setAllHospedes,
+    selectedFiles, setSelectedFiles,
+    fotoFrenteRG, setFotoFrenteRG,
+    fotoVersoRG, setFotoVersoRG
+
+
+  } = useContext(ContextFaceID);
+
 
   async function handleSubmit(e) {
     e.preventDefault(); 
@@ -244,6 +252,7 @@ export default function Forms() {
               id="fotoRgFrente"
               accept="image/*"
               required
+              onChange={e => setFotoFrenteRG(e.target.files)}
             />
           </div>
           <div className="flex flex-col bg-white py-5 gap-y-5 rounded-lg w-3/6">
@@ -256,6 +265,7 @@ export default function Forms() {
               id="fotoRgVerso"
               multiple accept="image/png, image/jpg"
               required
+              onChange={e => setFotoVersoRG(e.target.files)}
             />
           </div>
           <h1 className=" text-2xl font-extrabold text-verde">
@@ -271,6 +281,7 @@ export default function Forms() {
               id="fotoRosto"
               multiple accept="image/png, image/jpg"
               required
+              onChange={e => setSelectedFiles(e.target.files)}
             />
           </div>
           <Link

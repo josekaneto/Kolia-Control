@@ -4,7 +4,8 @@ import './index.css'
 import App from './App.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import FaceID from './Pages/FaceID.jsx'
-import Forms from './Componentes/forms.jsx'
+import Forms from './Componentes/Forms.jsx'
+import { FaceIdProvider } from './context/ContextFaceID.jsx'
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <FaceIdProvider>
+      <RouterProvider router={router} />
+    </FaceIdProvider>
   </StrictMode>,
 )
+
