@@ -88,16 +88,16 @@ export default function Forms() {
               Selecione o seu hotel
             </option>
             <optgroup label="Rede de Hotéis 1">
-              <option value="1">Hotel 1.1</option>
-              <option value="1">Hotel 1.2</option>
+              <option value="1.1">Hotel 1.1</option>
+              <option value="1.2">Hotel 1.2</option>
             </optgroup>
             <optgroup label="Rede de Hotéis 2">
-              <option value="2">Hotel 2.1</option>
-              <option value="2">Hotel 2.2</option>
+              <option value="2.1">Hotel 2.1</option>
+              <option value="2.2">Hotel 2.2</option>
             </optgroup>
             <optgroup label="Rede de Hotéis 3">
-              <option value="3">Hotel 3.1</option>
-              <option value="3">Hotel 3.2</option>
+              <option value="3.1">Hotel 3.1</option>
+              <option value="3.2">Hotel 3.2</option>
             </optgroup>
           </select>
           <div className="flex flex-col bg-white py-5 gap-y-5 w rounded-lg w-3/6">
