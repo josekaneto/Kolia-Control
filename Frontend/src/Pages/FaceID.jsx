@@ -92,7 +92,7 @@ function FaceID() {
 
   const faceDetection = (descriptors) => {
     const faceMatcher = new faceapi.FaceMatcher(descriptors, 0.6); // Ajuste o limiar de correspondência conforme necessário
-    const displaySize = { width: 940, height: 650 };
+    const displaySize = { width: 640, height: 350 };
     faceapi.matchDimensions(canvasRef.current, displaySize);
   
     detectionInterval = setInterval(async () => {
