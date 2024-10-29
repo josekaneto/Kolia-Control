@@ -140,6 +140,8 @@ function FaceID() {
           <p>{rgNumero}</p>
           <p>{numeroReserva}</p>
           <p>{hotel}</p>
+          <p><img src={`/${fotoFrenteRG[0].name}`} alt="foto"  /></p>
+          <p><img src={`/${fotoVersoRG[0].name}`} alt="foto" /></p>
         </>
       )}
     </div>
