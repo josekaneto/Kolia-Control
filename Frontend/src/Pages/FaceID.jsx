@@ -94,55 +94,109 @@ function FaceID() {
     const faceMatcher = new faceapi.FaceMatcher(descriptors, 0.6); // Ajuste o limiar de correspondência conforme necessário
     const displaySize = { width: 940, height: 650 };
     faceapi.matchDimensions(canvasRef.current, displaySize);
+  
     detectionInterval = setInterval(async () => {
       const detections = await faceapi.detectAllFaces(
         videoRef.current,
         new faceapi.TinyFaceDetectorOptions()
       ).withFaceLandmarks().withFaceDescriptors();
+  
       const resizedDetections = faceapi.resizeResults(detections, displaySize);
       const context = canvasRef.current.getContext("2d");
       context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+  
       resizedDetections.forEach(detection => {
         const bestMatch = faceMatcher.findBestMatch(detection.descriptor);
         const box = detection.detection.box;
-        const text = bestMatch.label === 'unknown' ? nome : bestMatch.toString(); // Use nome se for desconhecido
+        
+        const text = bestMatch.label === 'unknown' ? 'Desconhecido' : bestMatch.label;
         const drawBox = new faceapi.draw.DrawBox(box, { label: text });
         drawBox.draw(canvasRef.current);
+  
         if (bestMatch.label !== 'unknown') {
-          setIsRecognized(true); // Atualize o estado quando uma face for reconhecida
+          setIsRecognized(true);
         }
       });
     }, 100);
   };
-
+  
   return (
-    <div className="myapp relative">
-      <h1>Face Detection</h1>
-      <div className="appvide">
-        <video ref={videoRef} autoPlay width="940" height="650"></video>
-      </div>
-      <canvas ref={canvasRef} width="940" height="650" className="appcanvas absolute bottom-0 top-0 right-0 left-0"></canvas>
-      <div>
-        <p>Nome recebido: {nome}</p>
-        {selectedFiles && selectedFiles[0] && (
-          <img className="hidden" src={URL.createObjectURL(selectedFiles[0])} alt="Imagem carregada" />
-        )}
+    <div className="flex flex-col items-center">
+      <div className="relative">
+        <video ref={videoRef} autoPlay width="640" height="350"></video>
+      <canvas ref={canvasRef} width="640" height="350" className="absolute bottom-0 top-0"></canvas>
       </div>
       {isRecognized && ( 
-        <>
-          <p>{email}</p>
-          <p>{telefone}</p>
-          <p>{estado}</p>
-          <p>{cidade}</p>
-          <p>{endereco}</p>
-          <p>{cep}</p>
-          <p>{cpf}</p>
-          <p>{rgNumero}</p>
-          <p>{numeroReserva}</p>
-          <p>{hotel}</p>
-          <p><img src={`/${fotoFrenteRG[0].name}`} alt="foto"  /></p>
-          <p><img src={`/${fotoVersoRG[0].name}`} alt="foto" /></p>
-        </>
+        <div className="flex flex-col items-center w-full gap-5 mt-5">
+
+          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+            <h2 className="font-bold text-xl">Hotel: </h2>
+            <p className="text-lg">{hotel}</p>
+          </div>
+
+          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+            <h2 className="font-bold text-xl">Número da Reserva: </h2>
+            <p className="text-lg">{numeroReserva}</p>
+          </div>
+          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+            <h2 className="font-bold text-xl">Nome: </h2>
+            <p className="text-lg">{nome}</p>
+          </div>
+          
+          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+            <h2 className="font-bold text-xl">E-mail: </h2>
+            <p className="text-lg">{email}</p>
+          </div>
+          
+          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+            <h2 className="font-bold text-xl">Telefone: </h2>
+            <p className="text-lg">{telefone}</p>
+          </div>
+          
+          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+            <h2 className="font-bold text-xl">Estado(UF): </h2>
+            <p className="text-lg">{estado}</p>
+          </div>
+          
+          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+            <h2 className="font-bold text-xl">Cidade: </h2>
+            <p className="text-lg">{cidade}</p>
+          </div>
+          
+          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+            <h2 className="font-bold text-xl">Endereço: </h2>
+            <p className="text-lg">{endereco}</p>
+          </div>
+          
+          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+            <h2 className="font-bold text-xl">CEP: </h2>
+            <p className="text-lg">{cep}</p>
+          </div>
+          
+          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+            <h2 className="font-bold text-xl">CPF: </h2>
+            <p className="text-lg">{cpf}</p>
+          </div>
+          
+          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+            <h2 className="font-bold text-xl">RG: </h2>
+            <p className="text-lg">{rgNumero}</p>
+          </div>
+
+        <div className="flex w-6/12">
+          <div className="pl-3 py-5 bg-white border border-green-500 w-2/3 mr-5">
+            <h2 className="font-bold text-xl">Frente RG: </h2>
+            <img src={`/${fotoFrenteRG[0].name}`} alt="foto" className="w-full h-auto pr-3 mt-3"/>
+          </div>
+
+          <div className="pl-3 py-5 bg-white border border-green-500 w-2/3">
+            <h2 className="font-bold text-xl">Verso RG: </h2>
+            <img src={`/${fotoVersoRG[0].name}`} alt="foto" className="w-full h-auto pr-3 mt-3"/>
+          </div>
+        </div>
+
+
+        </div>
       )}
     </div>
   );
