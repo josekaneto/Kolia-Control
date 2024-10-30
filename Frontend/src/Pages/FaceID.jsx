@@ -92,7 +92,7 @@ function FaceID() {
 
   const faceDetection = (descriptors) => {
     const faceMatcher = new faceapi.FaceMatcher(descriptors, 0.6); // Ajuste o limiar de correspondência conforme necessário
-    const displaySize = { width: 940, height: 650 };
+    const displaySize = { width: 640, height: 350 };
     faceapi.matchDimensions(canvasRef.current, displaySize);
   
     detectionInterval = setInterval(async () => {
@@ -124,7 +124,7 @@ function FaceID() {
     <div className="flex flex-col items-center">
       <div className="relative">
         <video ref={videoRef} autoPlay width="640" height="350"></video>
-      <canvas ref={canvasRef} width="640" height="350" className="absolute bottom-0 top-0"></canvas>
+      <canvas ref={canvasRef} width="640" height="350" className="absolute top-0 left-0"></canvas>
       </div>
       {isRecognized && ( 
         <div className="flex flex-col items-center w-full gap-5 mt-5">
