@@ -121,75 +121,83 @@ function FaceID() {
   };
   
   return (
-    <div className="flex flex-col items-center">
-      <div className="relative">
+    <div className="flex flex-col items-center p-[50px]">
+
+    <section className="bg-white w-full h-40 rounded-xl flex flex-col items-center justify-evenly border-t-8 border-verde ">
+        <h2 className="text-4xl font-extrabold text-verde ">
+          RECONHECIMENTO FACIAL
+        </h2>
+        <p className="font-medium text-2xl">Ajuste a câmera para o rosto do hóspede</p>
+      </section>
+
+      <div className="relative mt-10">
         <video ref={videoRef} autoPlay width="640" height="350"></video>
       <canvas ref={canvasRef} width="640" height="350" className="absolute top-0 left-0"></canvas>
       </div>
       {isRecognized && ( 
-        <div className="flex flex-col items-center w-full gap-5 mt-5">
+        <div className="flex flex-col items-center w-full gap-y-10 mt-8">
 
-          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+          <div className="pl-3 py-5 bg-white rounded-lg w-6/12">
             <h2 className="font-bold text-xl">Hotel: </h2>
             <p className="text-lg">{hotel}</p>
           </div>
 
-          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+          <div className="pl-3 py-5 bg-white rounded-lg  w-6/12">
             <h2 className="font-bold text-xl">Número da Reserva: </h2>
             <p className="text-lg">{numeroReserva}</p>
           </div>
-          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+          <div className="pl-3 py-5 bg-white rounded-lg  w-6/12">
             <h2 className="font-bold text-xl">Nome: </h2>
             <p className="text-lg">{nome}</p>
           </div>
           
-          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+          <div className="pl-3 py-5 bg-white rounded-lg  w-6/12">
             <h2 className="font-bold text-xl">E-mail: </h2>
             <p className="text-lg">{email}</p>
           </div>
           
-          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+          <div className="pl-3 py-5 bg-white rounded-lg  w-6/12">
             <h2 className="font-bold text-xl">Telefone: </h2>
             <p className="text-lg">{telefone}</p>
           </div>
           
-          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+          <div className="pl-3 py-5 bg-white rounded-lg  w-6/12">
             <h2 className="font-bold text-xl">Estado(UF): </h2>
             <p className="text-lg">{estado}</p>
           </div>
           
-          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+          <div className="pl-3 py-5 bg-white rounded-lg  w-6/12">
             <h2 className="font-bold text-xl">Cidade: </h2>
             <p className="text-lg">{cidade}</p>
           </div>
           
-          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+          <div className="pl-3 py-5 bg-white rounded-lg  w-6/12">
             <h2 className="font-bold text-xl">Endereço: </h2>
             <p className="text-lg">{endereco}</p>
           </div>
           
-          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+          <div className="pl-3 py-5 bg-white rounded-lg  w-6/12">
             <h2 className="font-bold text-xl">CEP: </h2>
             <p className="text-lg">{cep}</p>
           </div>
           
-          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+          <div className="pl-3 py-5 bg-white rounded-lg  w-6/12">
             <h2 className="font-bold text-xl">CPF: </h2>
             <p className="text-lg">{cpf}</p>
           </div>
           
-          <div className="pl-3 py-5 bg-white border border-green-500 w-6/12">
+          <div className="pl-3 py-5 bg-white rounded-lg  w-6/12">
             <h2 className="font-bold text-xl">RG: </h2>
             <p className="text-lg">{rgNumero}</p>
           </div>
 
         <div className="flex w-6/12">
-          <div className="pl-3 py-5 bg-white border border-green-500 w-2/3 mr-5">
+          <div className="pl-3 py-5 bg-white rounded-lg  w-2/3 mr-5">
             <h2 className="font-bold text-xl">Frente RG: </h2>
             <img src={`/${fotoFrenteRG[0].name}`} alt="foto" className="w-full h-auto pr-3 mt-3"/>
           </div>
 
-          <div className="pl-3 py-5 bg-white border border-green-500 w-2/3">
+          <div className="pl-3 py-5 bg-white rounded-lg  w-2/3">
             <h2 className="font-bold text-xl">Verso RG: </h2>
             <img src={`/${fotoVersoRG[0].name}`} alt="foto" className="w-full h-auto pr-3 mt-3"/>
           </div>
